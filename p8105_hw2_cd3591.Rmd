@@ -61,3 +61,13 @@ merged_data = pols_data %>%
   left_join(unemployment_data, by = c("year", "month"))
 
 ```
+
+```{r}
+# export the cleaned datasets and the merged dataset
+readr::write_csv(merged_data,   "merged_data.csv")
+readr::write_csv(pols_data,     "pols_data.csv")
+readr::write_csv(snp_data,      "snp_data.csv")
+readr::write_csv(unemployment_data,  "unemployment_data.csv")
+```
+
+Description: 
