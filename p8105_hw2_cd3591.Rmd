@@ -30,12 +30,35 @@ pols_data = read_csv("pols-month.csv") %>%
 # read the snp data and clean it
 snp_data = read_csv("snp.csv") %>%
   janitor::clean_names() %>%
-  separate(date, into = c("month", "day", "year"), sep = "/") %>%  # separate date into month, day and year by "/"
+  mutate(date  = mdy(date)) %>%   # make the date into standard version
+  separate(date, into = c("year", "month", "day"), sep = "-") %>%  # separate date into month, day and year by "-"
   mutate(year = as.integer(year),  # change year (character) variable into integer
          month = as.integer(month),  # change month (character) variable into integer
          day = as.integer(day), # change day (character) variable into integer
          month = month.name[month]  # replace month number with month name
          ) %>%
   select(-day) %>%  # remove the day variable
-  relocate (year, month)  # make sure year and month are the leading columns
+  relocate (year, month)  # make sure year and month are the leading columns) 
+  
+```
+
+```{r}
+# read the unemployment data and tidy it
+unemployment_data = read_csv("unemployment.csv") %>%
+  janitor::clean_names() %>%
+  pivot_longer(
+    -year, names_to = "month", values_to = "unemployment"  
+    #except year variable, tidy names into month variable and values into unemployment variable
+  ) %>%
+  mutate(
+    month = str_to_title(month), # capitalize the first letter of the month to match other datasets
+    month = month.name[match(month, month.abb)]  # e.g. let "Jan" -> "January"
+  )
+
+# merge the datasets
+merged_data = pols_data %>%
+  left_join(snp_data, by = c("year", "month")) %>%
+  left_join(unemployment_data, by = c("year", "month"))
+merged_data
+
 ```
