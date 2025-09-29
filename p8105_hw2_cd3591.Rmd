@@ -5,3 +5,22 @@ date: "2025-09-29"
 output: github_document
 ---
 
+```{r}
+# setup library
+library(tidyverse)
+```
+
+# Problem 1
+```{r}
+# read the pols-month data and clean it
+pols_data = read_csv("pols-month.csv") %>%  
+  separate(mon, into = c("year", "month", "day"), sep = "-") %>%  # separate mon into year, month and day 
+  mutate(year = as.integer(year),  # change year (character) variable into integer
+         month = as.integer(month),  # change month (character) variable into integer
+         day = as.integer(day), # change day (character) variable into integer
+         month = month.name[month],  # replace month number with month name 
+         president = if_else(prez_gop == 1, "gop", "dem") # create president variable taking values gop and dem
+         ) %>%
+  select(-prez_dem, -prez_gop, -day)  # remove prez_dem and prez_gop and the day variable
+
+```
