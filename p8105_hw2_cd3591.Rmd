@@ -14,7 +14,8 @@ library(tidyverse)
 ```{r}
 # read the pols-month data and clean it
 pols_data = read_csv("pols-month.csv") %>%  
-  separate(mon, into = c("year", "month", "day"), sep = "-") %>%  # separate mon into year, month and day 
+  janitor::clean_names() %>%
+  separate(mon, into = c("year", "month", "day"), sep = "-") %>%  # separate mon into year, month and day by "-"
   mutate(year = as.integer(year),  # change year (character) variable into integer
          month = as.integer(month),  # change month (character) variable into integer
          day = as.integer(day), # change day (character) variable into integer
@@ -23,4 +24,18 @@ pols_data = read_csv("pols-month.csv") %>%
          ) %>%
   select(-prez_dem, -prez_gop, -day)  # remove prez_dem and prez_gop and the day variable
 
+```
+
+```{r}
+# read the snp data and clean it
+snp_data = read_csv("snp.csv") %>%
+  janitor::clean_names() %>%
+  separate(date, into = c("month", "day", "year"), sep = "/") %>%  # separate date into month, day and year by "/"
+  mutate(year = as.integer(year),  # change year (character) variable into integer
+         month = as.integer(month),  # change month (character) variable into integer
+         day = as.integer(day), # change day (character) variable into integer
+         month = month.name[month]  # replace month number with month name
+         ) %>%
+  select(-day) %>%  # remove the day variable
+  relocate (year, month)  # make sure year and month are the leading columns
 ```
