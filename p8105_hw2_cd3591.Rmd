@@ -30,7 +30,8 @@ pols_data = read_csv("pols-month.csv") %>%
 # read the snp data and clean it
 snp_data = read_csv("snp.csv") %>%
   janitor::clean_names() %>%
-  mutate(date  = mdy(date)) %>%   # make the date into standard version
+  mutate(date  = mdy(date),  # make the date into standard version
+         date = if_else(date > Sys.Date(), date %m-% years(100), date)) %>%   # e.g. let 2068 into 1968
   separate(date, into = c("year", "month", "day"), sep = "-") %>%  # separate date into month, day and year by "-"
   mutate(year = as.integer(year),  # change year (character) variable into integer
          month = as.integer(month),  # change month (character) variable into integer
