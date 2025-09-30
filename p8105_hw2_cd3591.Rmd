@@ -84,4 +84,11 @@ mr = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wh
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
   mutate(sports_balls = as.integer(round(as.numeric(sports_balls))))  
          #round the number of sports balls to the nearest integer and converts the result to an integer variable
+
+# read the Professor Trash Wheel data
+professor = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M123", col_names = TRUE,
+  na = c("", "NA")) %>% # omit non-data entries
+  janitor::clean_names() %>%  # use reasonable variable names
+  filter(!is.na(dumpster))  # omit rows that do not include dumpster-specific data
+
 ```
