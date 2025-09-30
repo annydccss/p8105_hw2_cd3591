@@ -170,15 +170,18 @@ zip_info_one = zip_info %>%
           neighborhood = str_c(sort(unique(neighborhood)), collapse = "; "),
           .groups = "drop")
 
-
 #merge together
 NY_zori = zori_new %>%
   left_join(zip_info_one,
             by = "zip_code") %>%
   arrange(zip_code, date) %>%
   relocate(zip_code, date, ZORI)
-
-
-
-
 ```
+
+```{r}
+# briefly describe the resulting tidy dataset
+n_obs = nrow(NY_zori)
+n_zip = dplyr::n_distinct(NY_zori$zip_code)
+n_neighborhood = dplyr::n_distinct(NY_zori$neighborhood, na.rm = TRUE)
+```
+The resulting tidy dataset contains a large number of observations spread across all available months and ZIP codes in New York City. In total, it includes `r n_obs` rows, covering `r n_zip` unique ZIP codes and representing `r n_neighborhood` distinct neighborhoods. This structure ensures that each row corresponds to a unique combination of ZIP code and date, with associated information on rental prices and location.
