@@ -86,7 +86,10 @@ mr = read_excel("202409 Trash Wheel Collection Data.xlsx",
   janitor::clean_names() %>%  # use reasonable variable names
   drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
-  mutate(sports_balls = as.integer(round(as.numeric(sports_balls))),  
+  mutate(date = as.Date(date),
+         year = as.integer(year),
+         month = as.character(month),
+         sports_balls = as.integer(round(as.numeric(sports_balls))),  
          #round the number of sports balls to the nearest integer and converts the result to an integer variable
          wheel = "Mr. Trash Wheel"  #keep track of Mr. Trash Wheel
          )  
@@ -100,7 +103,10 @@ professor = read_excel("202409 Trash Wheel Collection Data.xlsx",
   janitor::clean_names() %>%  # use reasonable variable names
   drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
-  mutate(wheel = "Professor Trash Wheel")  #keep track of Professor Trash Wheel
+  mutate(date = as.Date(date),
+         year = as.integer(year),
+         month = as.character(month),
+         wheel = "Professor Trash Wheel")  #keep track of Professor Trash Wheel
 
 # read the Gwynnda Trash Wheel data
 gwynnda = read_excel("202409 Trash Wheel Collection Data.xlsx", 
@@ -111,6 +117,11 @@ gwynnda = read_excel("202409 Trash Wheel Collection Data.xlsx",
   janitor::clean_names() %>%  # use reasonable variable names
   drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
-  mutate(wheel = "Gwynnda Trash Wheel")  #keep track of Gwynnda Trash Wheel
+  mutate(date = as.Date(date),
+         year = as.integer(year),
+         month = as.character(month),
+         wheel = "Gwynnda Trash Wheel")  #keep track of Gwynnda Trash Wheel
 
+# combine the datasets
+trash = bind_rows(mr, professor, gwynnda)
 ```
