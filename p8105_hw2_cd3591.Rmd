@@ -199,3 +199,32 @@ head(zips_only_in_zipfile, 5)
 ```
 I found out that there are several ZIP codes that appear in the New York City ZIP code dataset but do not appear in the Zillow rental price dataset. This may be because Zillow only includes areas with sufficient rental listings to generate reliable estimates. For example, 10464 (Southeast Bronx) is a small, low-density residential area with limited rental activity, while 10474 (Hunts Point and Mott Haven) is primarily industrial, with very few housing units. Similarly, 10499 is a non-standard ZIP code used mainly for postal facilities rather than residential addresses. Because these ZIPs lack enough rental data or represent special-purpose areas, Zillow excludes them from its published ZORI dataset.
 
+```{r}
+# pull Jan 2020 and Jan 2021 ZORI
+zori_2020_01 = NY_zori %>%
+  filter(date == "2020-01-31") %>%
+  select(zip_code, zori_2020_01 = ZORI)
+
+zori_2021_01 = NY_zori %>%
+  filter(date == "2021-01-31") %>%
+  select(zip_code, zori_2021_01 = ZORI)
+
+# combine and compute change
+zori_20_21 = NY_zori %>%
+  distinct(zip_code, borough, neighborhood) %>%
+  left_join(zori_2020_01, by = "zip_code") %>%
+  left_join(zori_2021_01, by = "zip_code") %>%
+  mutate(change_2021_vs_2020 = zori_2021_01 - zori_2020_01) %>%
+  arrange(change_2021_vs_2020)
+
+# top 10 largest drops
+top10_drop = zori_20_21 %>%
+  slice_min(order_by = change_2021_vs_2020, n = 10, with_ties = FALSE) %>%
+  select(zip_code, borough, neighborhood, zori_2020_01, zori_2021_01, change_2021_vs_2020)
+
+# pretty table
+knitr::kable(top10_drop, digits = 2,
+             col.names = c("ZIP", "Borough", "Neighborhood",
+                           "ZORI Jan 2020", "ZORI Jan 2021", "Change (2021 - 2020)"))
+```
+During the COVID-19 pandemic(Jan, 2020 - Jan, 2021), the largest rent declines are overwhelmingly concentrated in Manhattan (New York County), e.g., Lower Manhattan (10007, 10004, 10038), the Lower East Side (10002, 10009), Chelsea/Clinton (10001), Gramercy/Murray Hill (10016, 10010), and Greenwich Village/Soho (10012). These ZIPs show drops of roughly $700–$900 in ZORI. By contrast, many outer-borough areas saw smaller declines (or relative stability), suggesting a shift in demand away from Manhattan’s core during 2020–2021.
