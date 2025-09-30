@@ -124,4 +124,21 @@ gwynnda = read_excel("202409 Trash Wheel Collection Data.xlsx",
 
 # combine the datasets
 trash = bind_rows(mr, professor, gwynnda)
+
+# quick stats for inline use
+n_observations  = nrow(trash)
+n_variables = ncol(trash)
+year_min = min(trash$year, na.rm = TRUE)
+year_max = max(trash$year, na.rm = TRUE)
+
+prof_total_weight = trash %>%
+  filter(wheel == "Professor Trash Wheel") %>%
+  summarize(total_tons = sum(weight_tons, na.rm = TRUE)) %>%
+  pull()
+
+gwy_june_2022_cigs <- trash %>%
+  filter(wheel == "Gwynnda Trash Wheel", year == 2022, str_starts(month, "Jun")) %>%
+  summarize(total_cigs = sum(cigarette_butts, na.rm = TRUE)) %>%
+  pull()
 ```
+The combined Trash Wheel data set contains `r n_observations` observations and `r n_variables` variables, during `r year_min`–`r year_max`. Each row is a dumpster load with date, month, year, total weight_tons, volume_cubic_yards, and item counts such as plastic_bottles, polystyrene, cigarette_butts, glass_bottles, plastic_bags, wrappers, and sports_balls, plus a wheel identifier indicating Mr., Professor, or Gwynnda. For the available data, Professor Trash Wheel collected `r round(prof_total_weight, 2)` tons of trash in total, and Gwynnda collected `r scales::comma(gwy_june_2022_cigs)` cigarette butts in June 2022.
