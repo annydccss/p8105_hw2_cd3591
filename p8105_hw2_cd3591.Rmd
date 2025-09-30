@@ -77,5 +77,11 @@ pols_data.csv has 822 rows × 9 columns (year 1947-2015) with monthly counts of 
 
 # Problem 2
 ```{r}
-
+# read the Mr. Trash Wheel data
+mr = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N655", col_names = TRUE,
+  na = c("", "NA")) %>% # omit non-data entries
+  janitor::clean_names() %>%  # use reasonable variable names
+  filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
+  mutate(sports_balls = as.integer(round(as.numeric(sports_balls))))  
+         #round the number of sports balls to the nearest integer and converts the result to an integer variable
 ```
