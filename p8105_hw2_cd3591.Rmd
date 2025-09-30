@@ -142,3 +142,43 @@ gwy_june_2022_cigs <- trash %>%
   pull()
 ```
 The combined Trash Wheel data set contains `r n_observations` observations and `r n_variables` variables, during `r year_min`–`r year_max`. Each row is a dumpster load with date, month, year, total weight_tons, volume_cubic_yards, and item counts such as plastic_bottles, polystyrene, cigarette_butts, glass_bottles, plastic_bags, wrappers, and sports_balls, plus a wheel identifier indicating Mr., Professor, or Gwynnda. For the available data, Professor Trash Wheel collected `r round(prof_total_weight, 2)` tons of trash in total, and Gwynnda collected `r scales::comma(gwy_june_2022_cigs)` cigarette butts in June 2022.
+
+# Problem 3
+```{r}
+# read the dataset
+zip_info = read.csv("Zip Codes.csv")%>% 
+  janitor::clean_names() # clean names
+zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv")%>% 
+  janitor::clean_names() # clean names
+
+# tidy zori
+zori_new = zori %>% pivot_longer(
+  x2015_01_31:x2024_08_31, 
+  names_to = "date",
+  values_to = "ZORI",
+  names_prefix = "x"
+  ) %>%  # tidy the dates
+  mutate(date = ymd(str_replace_all(date, "_", "-")),
+         zip_code  = as.integer(region_name)
+         ) 
+
+# collapse zip_info to one row per ZIP to avoid many-to-many
+zip_info_one = zip_info %>%
+  mutate(zip_code = as.integer(zip_code)) %>%
+  group_by(zip_code) %>%
+  summarise(borough = first(county),
+          neighborhood = str_c(sort(unique(neighborhood)), collapse = "; "),
+          .groups = "drop")
+
+
+#merge together
+NY_zori = zori_new %>%
+  left_join(zip_info_one,
+            by = "zip_code") %>%
+  arrange(zip_code, date) %>%
+  relocate(zip_code, date, ZORI)
+
+
+
+
+```
