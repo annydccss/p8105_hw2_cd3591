@@ -78,11 +78,11 @@ pols_data.csv has 822 rows × 9 columns (year 1947-2015) with monthly counts of 
 # Problem 2
 ```{r}
 # read the Mr. Trash Wheel data
-mr = read_excel("202409 Trash Wheel Collection Data.xlsx", 
+mr = read_excel("202509 Trash Wheel Collection Data.xlsx", 
                 sheet = "Mr. Trash Wheel", 
-                range = "A2:N655", 
+                range = "A2:N710", 
                 col_names = TRUE,
-                na = c("", "NA")) %>% 
+                na = c(" ", ".", "NA")) %>% 
   janitor::clean_names() %>%  # use reasonable variable names
   drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
@@ -95,11 +95,11 @@ mr = read_excel("202409 Trash Wheel Collection Data.xlsx",
          )  
 
 # read the Professor Trash Wheel data
-professor = read_excel("202409 Trash Wheel Collection Data.xlsx", 
+professor = read_excel("202509 Trash Wheel Collection Data.xlsx", 
                        sheet = "Professor Trash Wheel", 
-                       range = "A2:M123", 
+                       range = "A2:M135", 
                        col_names = TRUE,
-                       na = c("", "NA")) %>% 
+                       na = c(" ", ".", "NA")) %>% 
   janitor::clean_names() %>%  # use reasonable variable names
   drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
@@ -109,11 +109,11 @@ professor = read_excel("202409 Trash Wheel Collection Data.xlsx",
          wheel = "Professor Trash Wheel")  #keep track of Professor Trash Wheel
 
 # read the Gwynnda Trash Wheel data
-gwynnda = read_excel("202409 Trash Wheel Collection Data.xlsx", 
+gwynnda = read_excel("202509 Trash Wheel Collection Data.xlsx", 
                      sheet = "Professor Trash Wheel", 
-                     range = "A2:L266", 
+                     range = "A2:L352", 
                      col_names = TRUE,
-                     na = c("", "NA")) %>% 
+                     na = c(" ", ".", "NA")) %>% 
   janitor::clean_names() %>%  # use reasonable variable names
   drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
