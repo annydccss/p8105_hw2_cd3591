@@ -185,3 +185,17 @@ n_zip = dplyr::n_distinct(NY_zori$zip_code)
 n_neighborhood = dplyr::n_distinct(NY_zori$neighborhood, na.rm = TRUE)
 ```
 The resulting tidy dataset contains a large number of observations spread across all available months and ZIP codes in New York City. In total, it includes `r n_obs` rows, covering `r n_zip` unique ZIP codes and representing `r n_neighborhood` distinct neighborhoods. This structure ensures that each row corresponds to a unique combination of ZIP code and date, with associated information on rental prices and location.
+
+```{r}
+# ZIP codes appear in the ZIP code dataset but not in the Zillow Rental Price dataset
+zips_in_zori = NY_zori %>% distinct(zip_code)
+zips_only_in_zipfile = zip_info_one %>%
+  distinct(zip_code, borough, neighborhood) %>%
+  anti_join(zips_in_zori, by = "zip_code") %>%
+  arrange(borough, zip_code)
+
+# show a few illustrative examples
+head(zips_only_in_zipfile, 5)
+```
+I found out that there are several ZIP codes that appear in the New York City ZIP code dataset but do not appear in the Zillow rental price dataset. This may be because Zillow only includes areas with sufficient rental listings to generate reliable estimates. For example, 10464 (Southeast Bronx) is a small, low-density residential area with limited rental activity, while 10474 (Hunts Point and Mott Haven) is primarily industrial, with very few housing units. Similarly, 10499 is a non-standard ZIP code used mainly for postal facilities rather than residential addresses. Because these ZIPs lack enough rental data or represent special-purpose areas, Zillow excludes them from its published ZORI dataset.
+
