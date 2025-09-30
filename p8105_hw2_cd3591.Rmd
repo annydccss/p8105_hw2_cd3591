@@ -91,4 +91,10 @@ professor = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Profe
   janitor::clean_names() %>%  # use reasonable variable names
   filter(!is.na(dumpster))  # omit rows that do not include dumpster-specific data
 
+# read the Gwynnda Trash Wheel data
+gwynnda = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:L266", col_names = TRUE,
+  na = c("", "NA")) %>% # omit non-data entries
+  janitor::clean_names() %>%  # use reasonable variable names
+  filter(!is.na(dumpster))  # omit rows that do not include dumpster-specific data
+
 ```
