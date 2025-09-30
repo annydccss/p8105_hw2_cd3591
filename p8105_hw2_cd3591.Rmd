@@ -81,6 +81,7 @@ pols_data.csv has 822 rows × 9 columns (year 1947-2015) with monthly counts of 
 mr = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N655", col_names = TRUE,
   na = c("", "NA")) %>% # omit non-data entries
   janitor::clean_names() %>%  # use reasonable variable names
+  janitor::remove_empty(c("rows","cols")) %>%  # drop empty rows or columns
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
   mutate(sports_balls = as.integer(round(as.numeric(sports_balls))))  
          #round the number of sports balls to the nearest integer and converts the result to an integer variable
@@ -89,12 +90,14 @@ mr = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wh
 professor = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M123", col_names = TRUE,
   na = c("", "NA")) %>% # omit non-data entries
   janitor::clean_names() %>%  # use reasonable variable names
+  janitor::remove_empty(c("rows","cols")) %>%  # drop empty rows or columns
   filter(!is.na(dumpster))  # omit rows that do not include dumpster-specific data
 
 # read the Gwynnda Trash Wheel data
 gwynnda = read_excel("202409 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:L266", col_names = TRUE,
   na = c("", "NA")) %>% # omit non-data entries
   janitor::clean_names() %>%  # use reasonable variable names
+  janitor::remove_empty(c("rows","cols")) %>%  # drop empty rows or columns
   filter(!is.na(dumpster))  # omit rows that do not include dumpster-specific data
 
 ```
