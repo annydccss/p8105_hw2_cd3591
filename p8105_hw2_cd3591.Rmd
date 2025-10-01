@@ -49,7 +49,7 @@ snp_data = read_csv("snp.csv") %>%
 unemployment_data = read_csv("unemployment.csv") %>%
   janitor::clean_names() %>%
   pivot_longer(
-    -year, names_to = "month", values_to = "unemployment_rate"  
+    -year, names_to = "month", values_to = "unemployment_rate(%)"  
     #except year variable, tidy names into month variable and values into unemployment variable
   ) %>%
   mutate(
@@ -73,7 +73,7 @@ readr::write_csv(unemployment_data,  "unemployment_data.csv")
 ```
 
 Description: 
-pols_data.csv has 822 rows × 9 columns (year 1947-2015) with monthly counts of officeholders by party: gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem, plus the president variable indicates whether the president was democratic or republican on the associated date (dem = democratic; gop = republican). snp_data.csv has 787 × 3 (year 1950–2015) with year, month, close (the closing values of the S&P stock index). unemployment_data.csv has 816 × 3 (year 1948–2015) with year, month, unemployment (percentage of unemployment on the associate date). After merging all data sets, merged_data.csv contains 822 rows × 11 columns, spanning 1947–2015. Key variables are year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem, president, close, and unemployment (%). 
+pols_data.csv has 822 rows × 9 columns (year 1947-2015) with monthly counts of officeholders by party: gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem, plus the president variable indicates whether the president was democratic or republican on the associated date (dem = democratic; gop = republican). snp_data.csv has 787 × 3 (year 1950–2015) with year, month, close (the closing values of the S&P stock index). unemployment_data.csv has 816 × 3 (year 1948–2015) with year, month, unemployment (percentage of unemployment on the associate date). After merging all data sets, merged_data.csv contains 822 rows × 11 columns, spanning 1947–2015. Key variables are year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem, president, close, and unemployment_rate (%). 
 
 # Problem 2
 ```{r}
