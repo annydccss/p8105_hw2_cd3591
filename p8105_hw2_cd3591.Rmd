@@ -84,7 +84,6 @@ mr = read_excel("202509 Trash Wheel Collection Data.xlsx",
                 col_names = TRUE,
                 na = c(" ", ".", "NA")) %>% 
   janitor::clean_names() %>%  # use reasonable variable names
-  drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
   mutate(date = as.Date(date),
          year = as.integer(year),
@@ -101,7 +100,6 @@ professor = read_excel("202509 Trash Wheel Collection Data.xlsx",
                        col_names = TRUE,
                        na = c(" ", ".", "NA")) %>% 
   janitor::clean_names() %>%  # use reasonable variable names
-  drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
   mutate(date = as.Date(date),
          year = as.integer(year),
@@ -110,12 +108,11 @@ professor = read_excel("202509 Trash Wheel Collection Data.xlsx",
 
 # read the Gwynnda Trash Wheel data
 gwynnda = read_excel("202509 Trash Wheel Collection Data.xlsx", 
-                     sheet = "Professor Trash Wheel", 
+                     sheet = "Gwynns Falls Trash Wheel", 
                      range = "A2:L352", 
                      col_names = TRUE,
                      na = c(" ", ".", "NA")) %>% 
   janitor::clean_names() %>%  # use reasonable variable names
-  drop_na(everything()) %>% # omit non-data entries
   filter(!is.na(dumpster)) %>%  # omit rows that do not include dumpster-specific data
   mutate(date = as.Date(date),
          year = as.integer(year),
@@ -169,7 +166,8 @@ zori_new = zori %>% pivot_longer(
 
 # collapse zip_info to one row per ZIP to avoid many-to-many
 zip_info_one = zip_info %>%
-  mutate(zip_code = as.integer(zip_code)) %>%
+  mutate(county = if_else(county == "New York", "Manhattan", county),
+         zip_code = as.integer(zip_code)) %>%
   group_by(zip_code) %>%
   summarise(borough = first(county),
             neighborhood = str_c(sort(unique(neighborhood)), collapse = "; "),
