@@ -49,7 +49,7 @@ snp_data = read_csv("snp.csv") %>%
 unemployment_data = read_csv("unemployment.csv") %>%
   janitor::clean_names() %>%
   pivot_longer(
-    -year, names_to = "month", values_to = "unemployment"  
+    -year, names_to = "month", values_to = "unemployment_rate"  
     #except year variable, tidy names into month variable and values into unemployment variable
   ) %>%
   mutate(
