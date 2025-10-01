@@ -148,9 +148,9 @@ The combined Trash Wheel data set contains `r n_observations` observations and `
 # Problem 3
 ```{r}
 # read the dataset
-zip_info = read.csv("Zip Codes.csv", na = c("NA", ".", ""))%>% 
+zip_info = read.csv("Zip Codes.csv", na = c("NA", ".", " "))%>% 
   janitor::clean_names() # clean names
-zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", na = c("NA", ".", ""))%>% 
+zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", na = c("NA", ".", " "))%>% 
   janitor::clean_names() # clean names
 
 # tidy zori
