@@ -1,4 +1,4 @@
-year,month,gov_gop,sen_gop,rep_gop,gov_dem,sen_dem,rep_dem,president,close,unemployment
+year,month,gov_gop,sen_gop,rep_gop,gov_dem,sen_dem,rep_dem,president,close,unemployment_rate
 1947,January,23,51,253,23,45,198,dem,NA,NA
 1947,February,23,51,253,23,45,198,dem,NA,NA
 1947,March,23,51,253,23,45,198,dem,NA,NA
