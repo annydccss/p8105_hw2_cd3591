@@ -151,9 +151,9 @@ The combined Trash Wheel data set contains `r n_observations` observations and `
 # Problem 3
 ```{r}
 # read the dataset
-zip_info = read.csv("Zip Codes.csv")%>% 
+zip_info = read.csv("Zip Codes.csv", na = c("NA", ".", ""))%>% 
   janitor::clean_names() # clean names
-zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv")%>% 
+zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", na = c("NA", ".", ""))%>% 
   janitor::clean_names() # clean names
 
 # tidy zori
@@ -172,8 +172,8 @@ zip_info_one = zip_info %>%
   mutate(zip_code = as.integer(zip_code)) %>%
   group_by(zip_code) %>%
   summarise(borough = first(county),
-          neighborhood = str_c(sort(unique(neighborhood)), collapse = "; "),
-          .groups = "drop")
+            neighborhood = str_c(sort(unique(neighborhood)), collapse = "; "),
+            .groups = "drop")
 
 #merge together
 NY_zori = zori_new %>%
@@ -184,12 +184,17 @@ NY_zori = zori_new %>%
 ```
 
 ```{r}
+# export the merged NY_zori dataset
+readr::write_csv(NY_zori, "NY_zori.csv")
+```
+
+```{r}
 # briefly describe the resulting tidy dataset
 n_obs = nrow(NY_zori)
 n_zip = dplyr::n_distinct(NY_zori$zip_code)
 n_neighborhood = dplyr::n_distinct(NY_zori$neighborhood, na.rm = TRUE)
 ```
-The resulting tidy dataset contains a large number of observations spread across all available months and ZIP codes in New York City. In total, it includes `r n_obs` rows, covering `r n_zip` unique ZIP codes and representing `r n_neighborhood` distinct neighborhoods. This structure ensures that each row corresponds to a unique combination of ZIP code and date, with associated information on rental prices and location.
+The resulting tidy dataset contains a large number of observations spread across all available months and ZIP codes in New York City. In total, it includes `r n_obs` observations, covering `r n_zip` unique ZIP codes and representing `r n_neighborhood` distinct neighborhoods. This structure ensures that each row corresponds to a unique combination of ZIP code and date, with associated information on rental prices and location.
 
 ```{r}
 # ZIP codes appear in the ZIP code dataset but not in the Zillow Rental Price dataset
