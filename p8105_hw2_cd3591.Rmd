@@ -148,9 +148,9 @@ The combined Trash Wheel data set contains `r n_observations` observations and `
 # Problem 3
 ```{r}
 # read the dataset
-zip_info = read.csv("Zip Codes.csv", na = c("NA", ".", " "))%>% 
+zip_info = read.csv("Zip Codes.csv", na = c("NA", ".", ""))%>% 
   janitor::clean_names() # clean names
-zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", na = c("NA", ".", " "))%>% 
+zori = read.csv("Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", na = c("NA", ".", ""))%>% 
   janitor::clean_names() # clean names
 
 # tidy zori
@@ -171,12 +171,14 @@ zip_info_one = zip_info %>%
   group_by(zip_code) %>%
   summarise(borough = first(county),
             neighborhood = str_c(sort(unique(neighborhood)), collapse = "; "),
-            .groups = "drop")
+            .groups = "drop") %>%
+  dplyr::mutate(neighborhood = dplyr::na_if(neighborhood, ""))  # identify the empty is NA
 
 #merge together
 NY_zori = zori_new %>%
   left_join(zip_info_one,
             by = "zip_code") %>%
+  dplyr::mutate(neighborhood = dplyr::na_if(neighborhood, "")) %>%  # identify the empty is NA
   arrange(zip_code, date) %>%
   relocate(zip_code, date, ZORI)
 ```
